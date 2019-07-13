@@ -25,8 +25,11 @@ object Wordcount {
     //reduceByKey(word,x)
     val result = k2v.reduceByKey(_ + _)
 
-    //展示输出
-    result.collect()
+    //将结果保存到HDFS中
+    result.saveAsTextFile(args(1))
+
+//    //展示输出
+//    result.collect()
 
     //4、关闭连接
     sc.stop()
