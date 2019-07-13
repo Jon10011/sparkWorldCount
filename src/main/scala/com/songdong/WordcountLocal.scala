@@ -1,0 +1,40 @@
+package com.songdong
+
+import org.apache.spark.{SparkConf, SparkContext}
+
+object WordcountLocal {
+  def main(args: Array[String]): Unit = {
+
+    //1、创建配置信息
+    val conf = new SparkConf().setAppName("Jon").setMaster("local[*]")
+
+    //2、创建spark context
+    val sc = new SparkContext(conf)
+
+    //3、处理
+
+    //读取数据
+    val lines = sc.textFile("/Users/jon/Desktop/概要笔记的副本.txt")
+
+    //flatmap压平  扁平化
+    val words = lines.flatMap(_.split(" "))
+
+    //map(word,l)
+    val k2v = words.map((_, 1))
+
+    //reduceByKey(word,x)
+    val result = k2v.reduceByKey(_ + _)
+
+    //将结果保存到HDFS中
+//    result.saveAsTextFile(args(1))
+
+//    //展示输出
+    result.foreach(println)
+//    result.collect()
+
+    //4、关闭连接
+    sc.stop()
+
+  }
+
+}
